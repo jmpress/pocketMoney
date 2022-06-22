@@ -8,9 +8,9 @@ Once server.js is running in node, navigate to localhost:3000 to begin using the
 
 Three "envelopes" are pre-defined in the code. The buttons will contain the following functionality:
 + Show All Envelopes: Displays a list of all defined envelopes along with how full they are (expressed as currentValue/maxValue).
-+ Change an Envelope: uses the values of the input fields to target an envelope and change the maximum budget, then displays all envelopes
-+ Make a new Envelope: uses the values of the input fields to create a new envelope, then displays all envelopes.
-+ Delete an Envelope: uses the values of the input fields to delete an envelope with the specified name, if it exists, then displays all envelopes.
++ Add to an Envelope: uses the values of the input fields to target an envelope and change the current value of that envelope, then refreshes display of all envelopes. Negative numbers subtract. Will not go below 0 or above maxValue.
++ Make a new Envelope: uses the values of the input fields to create a new envelope, then refreshes display of all envelopes.
++ Delete an Envelope: uses the values of the input fields to delete an envelope with the specified name, if it exists, then refreshes display of all envelopes.
 
 I have elected to build a simple front-end for practice, rather than using the Postman application to handle my fetch requests.
 
