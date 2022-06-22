@@ -32,8 +32,23 @@ const envelopes = [
 
 */
 
+//Checks the validity of an envelope
+function isValidEnvelope(req, res, next){
+    req.targetLabel = req.query.name;
+    req.targetBudget = req.query.value;
+    let targetIndex = -1;
+    for(let i = 0; i < envelopes.length; i++){
+        if(envelopes[i].name === req.targetLabel){
+            targetIndex = i;
+        }
+    }
+    req.index = targetIndex;
+    next();
+}
+
+
 envRouter.get('/', (req, res, next) => {
-    res.send(envelopes);
+    res.status(200).send(envelopes);
 });
 
 envRouter.post('/', (req, res, next) => {
@@ -47,16 +62,34 @@ envRouter.post('/', (req, res, next) => {
             currentValue: 0
         }
         envelopes.push(newEnvelope);
-        res.send(envelopes);
+        res.status(201).send(envelopes);
+    } else {
+        res.status().send();
     }
 });
 
-envRouter.put('/', (req, res, next) => {
-
+envRouter.put('/', isValidEnvelope, (req, res, next) => {
+    if(req.index === -1){
+        res.status(404).send()
+    } else {
+        envelopes[req.index].currentValue += Number(req.targetBudget);
+        if(envelopes[req.index].currentValue > envelopes[req.index].maxCapacity){
+            envelopes[req.index].currentValue = envelopes[req.index].maxCapacity;
+        }
+        if(envelopes[req.index].currentValue < 0){
+            envelopes[req.index].currentValue = 0;
+        }
+        
+        res.status(200).send(envelopes);
+    }
 });
 
-envRouter.delete('/', (req, res, next) => {
-
+envRouter.delete('/', isValidEnvelope, (req, res, next) => {
+    const targetLabel = req.query.name;
+    //Find index of record with targetLabel is the Name
+    //if -1, it does not exist, return 404
+    //otherwise, remove it from the array (splice)
+    res.status(204).send(envelopes);
 });
 
 envRouter.use((err, req, res, next) => {

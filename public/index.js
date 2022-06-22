@@ -12,10 +12,11 @@ let envelopes = [];
 //refactor out a function to Display envelope data to displayArea's innerHTML
 function displayAllEnvelopes(){
     let displayEnvelopes = '';
-        envelopes.forEach(envelope => {
-            displayEnvelopes = displayEnvelopes + ` ${envelope.name}   |   ${envelope.currentValue}/${envelope.maxCapacity} <br>`;
-        });
-        displayArea.innerHTML=displayEnvelopes;
+    displayArea.innerHTML=displayEnvelopes;
+    envelopes.forEach(envelope => {
+        displayEnvelopes = displayEnvelopes + ` ${envelope.name}   |   ${envelope.currentValue}/${envelope.maxCapacity} <br>`;
+    });
+    displayArea.innerHTML=displayEnvelopes;
 }
 
 //Make a "get paid" button that adds a numerical value to each envelope based on factors
@@ -30,6 +31,13 @@ getAllButton.addEventListener('click', async () =>{
 
 updateOneButton.addEventListener('click', async () =>{
     //Using input data from input fields, make a PUT request to update an envelope
+    const updateEnvelope = targetEnvelopeName.value;
+    const updateMoney = targetEnvelopeBudget.value;
+    const response = await fetch(`/envelopes?name=${updateEnvelope}&value=${updateMoney}`, {method: 'PUT'});
+    if(response.ok){
+        envelopes = await response.json();
+        displayAllEnvelopes();
+    }
 });
 
 makeNewButton.addEventListener('click', async () =>{
